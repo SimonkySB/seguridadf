@@ -21,14 +21,21 @@ public class WebSecurityConfig {
         http
             .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/", "/home").permitAll()
+                .requestMatchers("/", "/search").permitAll()
                 .requestMatchers("/**.css").permitAll()
+                .requestMatchers("/images/**.svg").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin((form) -> form
                 .loginPage("/login")
+                .defaultSuccessUrl("/home", true)
                 .permitAll()
             )
-            .logout((logout) -> logout.permitAll());
+            .logout((logout) -> 
+                logout
+                    .logoutSuccessUrl("/home")
+                    .permitAll()
+            );
 
         return http.build();
     }
@@ -46,7 +53,13 @@ public class WebSecurityConfig {
             .roles("USER","ADMIN")
             .build();
 
-        return new InMemoryUserDetailsManager(user, admin);
+        UserDetails manager = User.builder()
+            .username("manager")
+            .password(passwordEncoder().encode("password"))
+            .roles("USER","MANAGER")
+            .build();
+
+        return new InMemoryUserDetailsManager(user, admin, manager);
     }
 
 
