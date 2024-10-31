@@ -21,9 +21,7 @@
                     </li>
                 </ul>
                 <div sec:authorize="!isAuthenticated()">
-                    <form th:action="@{/login}" method="get" class="d-flex">
-                        <input class="btn btn-outline-success" type="submit" value="Login"/>
-                    </form>
+                    <a th:href="@{/login}" class="btn btn-outline-success d-flex">Login</a>
                 </div>
                 <div sec:authorize="isAuthenticated()" class="d-flex gap-3">
                     <div>Bienvenido, <span sec:authentication="name"></span>!</div>

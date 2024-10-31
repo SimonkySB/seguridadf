@@ -19,11 +19,24 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .headers(headers -> 
+                headers.contentSecurityPolicy(csp -> csp.policyDirectives(
+                    "default-src 'self'; "+ 
+                    "style-src 'self' https://cdn.jsdelivr.net; " +
+                    "script-src 'self' https://cdn.jsdelivr.net; " + 
+                    "img-src 'self' data: https://cdn.jsdelivr.net https://placehold.co; " + 
+                    "frame-ancestors 'none'; " +
+                    "connect-src 'self'; " +
+                    "font-src 'self' https://fonts.gstatic.com; " +
+                    "object-src 'none';"
+                ))
+            )
             .authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/", "/home").permitAll()
                 .requestMatchers("/", "/search").permitAll()
                 .requestMatchers("/**.css").permitAll()
                 .requestMatchers("/images/**.svg").permitAll()
+                .requestMatchers("/._darcs/**", "/.bzr/**", "/.hg/**", "/BitKeeper/**").denyAll()
                 .anyRequest().authenticated()
             )
             .formLogin((form) -> form
