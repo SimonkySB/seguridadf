@@ -32,9 +32,9 @@ public class WebSecurityConfig {
                 ))
             )
             .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/", "/home").permitAll()
-                .requestMatchers("/", "/search").permitAll()
+                .requestMatchers("/", "/home", "/search").permitAll()
                 .requestMatchers("/**.css").permitAll()
+                .requestMatchers("/**.js").permitAll()
                 .requestMatchers("/images/**.svg").permitAll()
                 .requestMatchers("/._darcs/**", "/.bzr/**", "/.hg/**", "/BitKeeper/**").denyAll()
                 .anyRequest().authenticated()
